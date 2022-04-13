@@ -24,9 +24,7 @@ public class Project1 {
 		
 		char c = usrInput[index];
 		
-		if (c == '_')
-			return q0(usrInput, index, max);
-		else if (digits.contains(c)) {
+		if (digits.contains(c)) {
 			stack.push(c);
 			return q1(usrInput, index+1, max);
 		} else if (c == '.')
@@ -44,7 +42,7 @@ public class Project1 {
 		char c = usrInput[index];
 		
 		if (c == '_')
-			return q1(usrInput, index+1, max);
+			return q8(usrInput, index+1, max);
 		else if (digits.contains(c)) {
 			stack.push(c);
 			return q1(usrInput, index+1, max);
@@ -60,14 +58,14 @@ public class Project1 {
 		} else		
 			return false;
 	}
-	
+
+
 	private static boolean q2(char[] usrInput, int index, int max) {
 		if (index == max)
 			return false;
 		char c = usrInput[index];
-		if (c == '_')
-			return q2(usrInput, index+1, max);
-		else if (digits.contains(c)) {
+		
+		if (digits.contains(c)) {
 			stack.push(c);
 			return q3(usrInput, index+1, max);
 		}else
@@ -82,7 +80,7 @@ public class Project1 {
 		char c = usrInput[index];
 		
 		if (c == '_')
-			return q3(usrInput, index+1, max);
+			return q9(usrInput, index+1, max);
 		else if (digits.contains(c)) {
 			stack.push(c);
 			return q3(usrInput, index+1,max);
@@ -101,9 +99,8 @@ public class Project1 {
 			return false;
 		
 		char c = usrInput[index];
-		if (c == '_')
-			return q4(usrInput, index+1, max);
-		else if (c == '-') {
+		
+		if (c == '-') {
 			isNegative = true;
 			return q6(usrInput, index+1, max);
 		} else if (c == '+')
@@ -127,9 +124,7 @@ public class Project1 {
 			return false;
 		char c = usrInput[index];
 		
-		if (c == '_')
-			return q6(usrInput, index+1, max);
-		else if (digits.contains(c)) {
+		if (digits.contains(c)) {
 			stack.push(c);
 			return q7(usrInput, index+1, max);
 		} else
@@ -145,13 +140,59 @@ public class Project1 {
 		char c = usrInput[index];
 		
 		if (c == '_')
-			return q7(usrInput, index+1, max);
+			return q10(usrInput, index+1, max);
 		else if (digits.contains(c)) {
 			stack.push(c);
 			return q7(usrInput, index+1, max);
 		} else if (endings.contains(c)) {
 			getExponent();
 			return q5(usrInput, index+1, max);
+		} else
+			return false;
+	}
+	
+	
+	private static boolean q8(char[] usrInput, int index, int max) {
+		if (index == max) {
+			return false;
+		}
+		
+		char c = usrInput[index];
+		if (c == '_')
+			return q8(usrInput, index+1, max);
+		else if (digits.contains(c)) {
+			stack.push(c);
+			return q1(usrInput, index+1, max);
+		} else
+			return false;
+	}
+	
+	private static boolean q9(char[] usrInput, int index, int max) {
+		if (index == max) {
+			return false;
+		}
+		
+		char c = usrInput[index];
+		if (c == '_')
+			return q9(usrInput, index+1, max);
+		else if (digits.contains(c)) {
+			stack.push(c);
+			return q3(usrInput, index+1, max);
+		} else
+			return false;
+	}
+	
+	private static boolean q10(char[] usrInput, int index, int max) {
+		if (index == max) {
+			return false;
+		}
+		
+		char c = usrInput[index];
+		if (c == '_')
+			return q10(usrInput, index+1, max);
+		else if (digits.contains(c)) {
+			stack.push(c);
+			return q7(usrInput, index+1, max);
 		} else
 			return false;
 	}
