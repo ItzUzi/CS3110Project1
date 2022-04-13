@@ -13,7 +13,7 @@ public class Project1 {
 	static Stack<Character> stack = new Stack<Character>();
 	
 	public static String prompt() {
-		System.out.printf("Enter a number or press \'q\' to quit\n(accepted format 111.32e4f)\n");
+		System.out.printf("Enter a floating point literal or press \'q\' to quit\n(accepted format 111.32e4f)\n");
 		Scanner kbInput = new Scanner(System.in);
 		return kbInput.next().toLowerCase();
 	}
@@ -23,26 +23,18 @@ public class Project1 {
 			return false;
 		
 		char c = usrInput[index];
-
-		if (digits.contains(c)) {
+		
+		if (c == '_')
+			return q0(usrInput, index, max);
+		else if (digits.contains(c)) {
 			stack.push(c);
 			return q1(usrInput, index+1, max);
 		} else if (c == '.')
-			return q8(usrInput, index+1, max);
+			return q2(usrInput, index+1, max);
 		else
 			return false;
 	}
 	
-	private static boolean q8(char[] usrInput, int index, int max) {
-		if (index == max)
-			return false;
-		char c = usrInput[index];
-		if (digits.contains(c)) {
-			stack.push(c);
-			return q5(usrInput, index+1, max);
-		}else
-			return false;
-	}
 
 	private static boolean q1(char[] usrInput, int index, int max) {
 		if (index == max) {
@@ -50,15 +42,18 @@ public class Project1 {
 			return false;
 		}
 		char c = usrInput[index];
-		if (digits.contains(c)) {
+		
+		if (c == '_')
+			return q1(usrInput, index+1, max);
+		else if (digits.contains(c)) {
 			stack.push(c);
 			return q1(usrInput, index+1, max);
 		} else if (c == '.') {
 			getSum();
-			return q2(usrInput, index+1, max);
+			return q3(usrInput, index+1, max);
 		} else if (endings.contains(c)) {
 			getSum();
-			return q3(usrInput, index+1, max);
+			return q5(usrInput, index+1, max);
 		} else if (c == 'e') {
 			getSum();
 			return q4(usrInput, index+1, max);
@@ -68,54 +63,47 @@ public class Project1 {
 	
 	private static boolean q2(char[] usrInput, int index, int max) {
 		if (index == max)
-			return true;
+			return false;
 		char c = usrInput[index];
-		
-		if (digits.contains(c)) {
+		if (c == '_')
+			return q2(usrInput, index+1, max);
+		else if (digits.contains(c)) {
 			stack.push(c);
-			return q5(usrInput, index+1,max);
-		} else if (endings.contains(c))
 			return q3(usrInput, index+1, max);
-		else if (c == 'e')
-			return q4(usrInput, index+1, max);
-		else
+		}else
 			return false;
 	}
 	
-	private static boolean q5(char[] usrInput, int index, int max) {
+	private static boolean q3(char[] usrInput, int index, int max) {
 		if (index == max) {
 			getDecimal();
 			return true;
 		}
 		char c = usrInput[index];
 		
-		if (digits.contains(c)) {
+		if (c == '_')
+			return q3(usrInput, index+1, max);
+		else if (digits.contains(c)) {
 			stack.push(c);
+			return q3(usrInput, index+1,max);
+		} else if (endings.contains(c)) {
+			getDecimal();
 			return q5(usrInput, index+1, max);
 		} else if (c == 'e') {
 			getDecimal();
 			return q4(usrInput, index+1, max);
-		} else if (endings.contains(c)) {
-			getDecimal();
-			return q3(usrInput, index+1, max);
 		} else
 			return false;
 	}
 	
-	private static boolean q3(char[] usrInput, int index, int max) {
-		if (index == max)
-			return true;
-		else
-			return false;
-	}
-
 	private static boolean q4(char[] usrInput, int index, int max) {
 		if (index == max)
 			return false;
 		
 		char c = usrInput[index];
-		
-		if (c == '-') {
+		if (c == '_')
+			return q4(usrInput, index+1, max);
+		else if (c == '-') {
 			isNegative = true;
 			return q6(usrInput, index+1, max);
 		} else if (c == '+')
@@ -126,6 +114,28 @@ public class Project1 {
 		} else
 			return false;
 	}
+	
+	private static boolean q5(char[] usrInput, int index, int max) {
+		if (index == max) {
+			return true;
+		} else
+			return false;
+	}
+	
+	private static boolean q6(char[] usrInput, int index, int max) {
+		if (index == max)
+			return false;
+		char c = usrInput[index];
+		
+		if (c == '_')
+			return q6(usrInput, index+1, max);
+		else if (digits.contains(c)) {
+			stack.push(c);
+			return q7(usrInput, index+1, max);
+		} else
+			return false;
+	}
+
 
 	private static boolean q7(char[] usrInput, int index, int max) {
 		if (index == max) {
@@ -134,24 +144,14 @@ public class Project1 {
 		}
 		char c = usrInput[index];
 		
-		if (digits.contains(c)) {
+		if (c == '_')
+			return q7(usrInput, index+1, max);
+		else if (digits.contains(c)) {
 			stack.push(c);
 			return q7(usrInput, index+1, max);
 		} else if (endings.contains(c)) {
 			getExponent();
-			return q3(usrInput, index+1, max);
-		} else
-			return false;
-	}
-
-	private static boolean q6(char[] usrInput, int index, int max) {
-		if (index == max)
-			return false;
-		char c = usrInput[index];
-		
-		if (digits.contains(c)) {
-			stack.push(c);
-			return q7(usrInput, index+1, max);
+			return q5(usrInput, index+1, max);
 		} else
 			return false;
 	}
@@ -208,11 +208,10 @@ public class Project1 {
 		while (!input.equals("q")) {
 			char[] usrInput = input.toCharArray();
 			int index = 0;
-			int negativeOne = -1;
 			
 			if (q0(usrInput, index, usrInput.length)) {
 				if(isNegative)
-					System.out.println(total * Math.pow(10,  exponent * negativeOne));
+					System.out.println(total * Math.pow(10,  exponent * -1));
 				else
 					System.out.println(total * Math.pow(10,  exponent));
 			} 
