@@ -35,10 +35,8 @@ public class Project1 {
 	
 
 	private static boolean q1(char[] usrInput, int index, int max) {
-		if (index == max) {
-			stack.clear();
+		if (index == max)
 			return false;
-		}
 		char c = usrInput[index];
 		
 		if (c == '_')
@@ -55,7 +53,7 @@ public class Project1 {
 		} else if (c == 'e') {
 			getSum();
 			return q4(usrInput, index+1, max);
-		} else		
+		} else
 			return false;
 	}
 
@@ -258,10 +256,12 @@ public class Project1 {
 			} 
 			else
 				System.out.println("Invalid format");
+			stack.clear();
 			total = 0;
 			exponent = 0;
 			isNegative = false;
 			input = prompt();
 		}
+		System.out.println("Exited number identifier.");
 	}
 }
