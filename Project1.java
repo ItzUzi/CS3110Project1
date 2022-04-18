@@ -24,7 +24,7 @@ public class Project1 {
 	
 	/**
 	 * start state, goes to state 1 and state 2
-	 * @return true if input is accepted, else false
+	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q0(char[] usrInput, int index, int max) {
 		if(index == max)
@@ -68,7 +68,7 @@ public class Project1 {
 	}
 
 	/**
-	 * goes to q3
+	 * goes to q9
 	 * @return true if input accepted, else false
 	 */
 	private static boolean q2(char[] usrInput, int index, int max) {
@@ -78,41 +78,36 @@ public class Project1 {
 		
 		if (digits.contains(c)) {
 			stack.push(c);
-			return q3(usrInput, index+1, max);
+			return q9(usrInput, index+1, max);
 		}else
 			return false;
 	}
 	
 	/**
 	 * Accept State
-	 * goes to q3, q4, q5, q9
+	 * goes to q4, q5, q9
 	 * @return true if String has ended, or if input is accepted, else false
 	 */
 	private static boolean q3(char[] usrInput, int index, int max) {
-		if (index == max) {
-			getDecimal();
+		if (index == max)
 			return true;
-		}
+		
 		char c = usrInput[index];
 		
-		if (c == '_')
-			return q9(usrInput, index+1, max);
-		else if (digits.contains(c)) {
+		if (digits.contains(c)) {
 			stack.push(c);
-			return q3(usrInput, index+1,max);
-		} else if (endings.contains(c)) {
-			getDecimal();
-			return q5(usrInput, index+1, max);
+			return q9(usrInput, index+1,max);
 		} else if (c == 'e') {
-			getDecimal();
 			return q4(usrInput, index+1, max);
+		} else if (endings.contains(c)) {
+			return q5(usrInput, index+1, max);
 		} else
 			return false;
 	}
 	
 	/**
 	 * goes to q6, q7
-	 * @return true if input is accepted, else false
+	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q4(char[] usrInput, int index, int max) {
 		if (index == max)
@@ -135,15 +130,15 @@ public class Project1 {
 	 * @return true if string has ended, else false
 	 */
 	private static boolean q5(char[] usrInput, int index, int max) {
-		if (index == max) {
+		if (index == max)
 			return true;
-		} else
+		else
 			return false;
 	}
 	
 	/**
 	 * goes to q7
-	 * @return true if input is accepted, else false
+	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q6(char[] usrInput, int index, int max) {
 		if (index == max)
@@ -159,7 +154,7 @@ public class Project1 {
 
 	/**
 	 * Accept State
-	 * goes to q5, q7, q10
+	 * goes to q5, q7, q11
 	 * @return true if reached end of string or if input is accepted,
 	 * else false
 	 */
@@ -170,7 +165,7 @@ public class Project1 {
 		}
 		char c = usrInput[index];
 		if (c == '_')
-			return q10(usrInput, index+1, max);
+			return q11(usrInput, index+1, max);
 		else if (digits.contains(c)) {
 			stack.push(c);
 			return q7(usrInput, index+1, max);
@@ -183,7 +178,7 @@ public class Project1 {
 	
 	/**
 	 * goes to q1, q8
-	 * @return true if input is accepted, else false
+	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q8(char[] usrInput, int index, int max) {
 		if (index == max) {
@@ -200,26 +195,34 @@ public class Project1 {
 	}
 	
 	/**
-	 * goes to q9, q3
-	 * @return true if input is accepted, else false
+	 * Accept state
+	 * goes to q4, q5, q9, q10
+	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q9(char[] usrInput, int index, int max) {
 		if (index == max) {
-			return false;
+			getDecimal();
+			return true;
 		}
 		char c = usrInput[index];
 		if (c == '_')
-			return q9(usrInput, index+1, max);
+			return q10(usrInput, index+1, max);
 		else if (digits.contains(c)) {
 			stack.push(c);
-			return q3(usrInput, index+1, max);
+			return q9(usrInput, index+1, max);
+		} else if (c == 'e') {
+			getDecimal();
+			return q4(usrInput, index+1, max);
+		} else if (endings.contains(c)) {
+			getDecimal();
+			return q5(usrInput, index+1, max);
 		} else
 			return false;
 	}
 	
 	/**
-	 * goes to q7, q10
-	 * @return true if input is accepted, else false
+	 * goes to q9, q10
+	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q10(char[] usrInput, int index, int max) {
 		if (index == max) {
@@ -230,8 +233,25 @@ public class Project1 {
 			return q10(usrInput, index+1, max);
 		else if (digits.contains(c)) {
 			stack.push(c);
-			return q7(usrInput, index+1, max);
+			return q9(usrInput, index+1, max);
 		} else
+			return false;
+	}
+	
+	/**
+	 * goes to q7, q11
+	 * @return true if input ends on accept state, else false
+	 */
+	private static boolean q11(char[] usrInput, int index, int max) {
+		if (index == max)
+			return false;
+		char c = usrInput[index];
+		if (c == '_')
+			return q11(usrInput, index+1, max);
+		else if (digits.contains(c)) {
+			stack.push(c);
+			return q7(usrInput, index+1, max);
+		} else 
 			return false;
 	}
 
