@@ -3,14 +3,16 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
-public class Project1 {
+public class Project2 {
 	
 	static List<Character> digits = Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 	static List<Character> endings = Arrays.asList('f', 'd');
 	static double total = 0;
 	static double exponent = 0;
-	static boolean isNegative = false;
+	static int sign = 1;
 	static Stack<Character> stack = new Stack<Character>();
+	static Stack<Character> operators = new Stack<Character>();
+	static Stack<Double> operands = new Stack<Double>();
 	
 	/**
 	 * Prompts user to input floating point literal
@@ -114,7 +116,7 @@ public class Project1 {
 			return false;	
 		char c = usrInput[index];
 		if (c == '-') {
-			isNegative = true;
+			sign = -1;
 			return q6(usrInput, index+1, max);
 		} else if (c == '+')
 			return q6(usrInput, index+1, max);
@@ -319,19 +321,17 @@ public class Project1 {
 		while (!input.equals("q")) {
 			char[] usrInput = input.toCharArray();
 			int index = 0;
-			
 			if (q0(usrInput, index, usrInput.length)) {
-				if(isNegative)
-					System.out.println(total * Math.pow(10,  exponent * -1));
-				else
-					System.out.println(total * Math.pow(10,  exponent));
-			} 
+				total *= Math.pow(10, exponent*sign);
+				System.out.println(total);
+				operands.push(total);
+			}
 			else
 				System.out.println("Invalid format");
 			stack.clear();
 			total = 0;
 			exponent = 0;
-			isNegative = false;
+			sign = 0;
 			input = prompt();
 		}
 		System.out.println("Exited number identifier.");
