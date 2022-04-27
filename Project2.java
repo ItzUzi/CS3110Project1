@@ -255,6 +255,51 @@ public class Project2 {
 			return false;
 	}
 
+	private static boolean q12(char[] usrInput, int index, int max) {
+		char c = usrInput[index];
+		if (c == ' ')
+			return q12(usrInput, index+1, max);
+		else if (operations.contains(c))
+			return q13(usrInput, index, max);
+		else
+			return false;
+	}
+
+	private static boolean q13(char[] usrInput, int index, int max) {
+		char c = usrInput[index];
+		if (operators.isEmpty()){
+			operators.push(c);
+			return true; // goes to q14 where it checks next char
+		} else if (c == ')') return true;
+			// goes to q15 , keeps popping until empty stack or reaches '(', if empty returns false
+		else if (precedence(c) <= precedence(operators.peek())){
+			if (operands.size() < 2)
+				return false;
+			double num1 = operands.pop();
+			double num2 = operands.pop();
+			operands.push(operation(num1, num2)); // method that calculates operation
+			return q14(usrInput, index+1, max); // goes to q14 where it checks next char
+		} else {
+			operators.push(c);
+			return q14(usrInput, index+1, max); //goes to q14 where it checks next char
+		}
+	}
+
+	private static boolean q14(char[] usrInput, int index, int max) {
+		if (index != max)
+			return true; // goes to q16, checks if '(' or digit, if digit goes to float dfa
+		else
+			if (operators.isEmpty() && operands.size() == 1) {
+				total = operands.pop();
+				return true;
+			} else
+				return true; // goes to q17, tries to empty stacks, if one fails to meet requirement, returns false
+	}
+
+	private static boolean q15(char[] usrInput, int index, int max) {
+		return false;
+	}
+
 	/**
 	 * Empties stack and sets exponent value
 	 */
@@ -300,6 +345,34 @@ public class Project2 {
 			case '8' -> 8.0;
 			case '9' -> 9.0;
 			default -> 0;
+		};
+	}
+
+	/**
+	 * @param c char to be checked
+	 * @return precedence value based on operation
+	 */
+	private static int precedence(char c){
+		return switch (c) {
+			case '(', ')' -> 3;
+			case '*', '/' -> 2;
+			case '+', '-' -> 1;
+			default -> -1;
+		};
+	}
+
+	/**
+	 * @param num1 first operand
+	 * @param num2 second operand
+	 * @return value of operation being done, dependent on operator stack
+	 */
+	private static double operation(double num1, double num2){
+		return switch (operators.pop()) {
+			case '*' -> num2 * num1;
+			case '/' -> num2 / num1;
+			case '+' -> num2 + num1;
+			case '-' -> num2 - num1;
+			default -> -1;
 		};
 	}
 	
