@@ -319,7 +319,7 @@ public class Project2 {
 			stack.clear();
 			total = 0;
 			exponent = 0;
-			sign = 0;
+			sign = 1;
 			input = prompt();
 		}
 		System.out.println("Exited number identifier.");
