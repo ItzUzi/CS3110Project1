@@ -7,20 +7,19 @@ public class Project2 {
 	
 	static List<Character> digits = Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 	static List<Character> endings = Arrays.asList('f', 'd');
-	static List<Character> operations = Arrays.asList('+', '-', '*', '/', '(', ')', ' ');
 	static double total = 0;
 	static double exponent = 0;
 	static int sign = 1;
-	static Stack<Character> stack = new Stack<>();
-	static Stack<Character> operators = new Stack<>();
-	static Stack<Double> operands = new Stack<>();
+	static Stack<Character> stack = new Stack<Character>();
+	static Stack<Character> operators = new Stack<Character>();
+	static Stack<Double> operands = new Stack<Double>();
 	
 	/**
 	 * Prompts user to input floating point literal
-	 * @return user inputted string
+	 * @return user inputed string
 	 */
 	public static String prompt() {
-		System.out.print("Enter a floating point literal or press 'q' to quit\n(accepted format 111.32e4f)\n");
+		System.out.printf("Enter a floating point literal or press \'q\' to quit\n(accepted format 111.32e4f)\n");
 		Scanner kbInput = new Scanner(System.in);
 		return kbInput.next().toLowerCase();
 	}
@@ -103,9 +102,7 @@ public class Project2 {
 		} else if (c == 'e') {
 			return q4(usrInput, index+1, max);
 		} else if (endings.contains(c)) {
-			return q5(usrInput, index + 1, max);
-		} else if(operations.contains(c)) {
-			return q13(usrInput, index, max);
+			return q5(usrInput, index+1, max);
 		} else
 			return false;
 	}
@@ -137,10 +134,7 @@ public class Project2 {
 	private static boolean q5(char[] usrInput, int index, int max) {
 		if (index == max)
 			return true;
-		char c = usrInput[index];
-		if(operations.contains(c)) {
-			return q13(usrInput, index, max);
-		} else
+		else
 			return false;
 	}
 	
@@ -180,9 +174,6 @@ public class Project2 {
 		} else if (endings.contains(c)) {
 			getExponent();
 			return q5(usrInput, index+1, max);
-		} else if(operations.contains(c)) {
-			getExponent();
-			return q13(usrInput, index, max);
 		} else
 			return false;
 	}
@@ -227,10 +218,7 @@ public class Project2 {
 		} else if (endings.contains(c)) {
 			getDecimal();
 			return q5(usrInput, index+1, max);
-		} else if(operations.contains(c)) {
-			getDecimal();
-			return q13(usrInput, index, max);
-		}  else
+		} else
 			return false;
 	}
 	
@@ -269,36 +257,6 @@ public class Project2 {
 			return false;
 	}
 
-	private static boolean q13(char[] usrInput, int index, int max) {
-		operands.push(total * Math.pow(10, exponent*sign));
-		total = 0;
-		sign = 1;
-		exponent = 0;
-		char c = usrInput[index];
-		if (true);
-		if (operators.isEmpty())
-			operators.push(c);
-		else
-			if (precedence(operators.peek()) <= precedence(c))
-
-	}
-
-	private static boolean q14(char[] usrInput, int index, int max) {
-		if (index == max)
-			return false;
-		char c = usrInput[index];
-		if (c == ' ')
-			return q14(usrInput, index+1, max);
-		else if (operations.contains(c))
-			return q15(usrInput, index+1, max);
-		else
-			return false;
-	}
-
-	private static boolean q15(char[] usrInput, int index, int max) {
-		return true;
-	}
-
 	/**
 	 * Empties stack and sets exponent value
 	 */
@@ -333,29 +291,30 @@ public class Project2 {
 	 */
 	private static double getNum() {
 		char i = stack.pop();
-		return switch (i) {
-			case '1' -> 1.0;
-			case '2' -> 2.0;
-			case '3' -> 3.0;
-			case '4' -> 4.0;
-			case '5' -> 5.0;
-			case '6' -> 6.0;
-			case '7' -> 7.0;
-			case '8' -> 8.0;
-			case '9' -> 9.0;
-			default -> 0;
-		};
+		switch (i) {
+		case '1':
+			return 1.0;
+		case '2':
+			return 2.0;
+		case '3':
+			return 3.0;
+		case '4':
+			return 4.0;
+		case '5':
+			return 5.0;
+		case '6':
+			return 6.0;
+		case '7':
+			return 7.0;
+		case '8':
+			return 8.0;
+		case '9':
+			return 9.0;
+		default:
+			return 0;
+		}
 	}
-
-	private static int precedence(char op) {
-		return switch (op) {
-			case '(', ')' -> 3;
-			case '*', '/' -> 2;
-			case '+', '-' -> 1;
-			default -> 0;
-		};
-	}
-
+	
 	public static void main(String[] args) {
 		String input = prompt();
 		
