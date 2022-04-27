@@ -7,19 +7,20 @@ public class Project2 {
 	
 	static List<Character> digits = Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 	static List<Character> endings = Arrays.asList('f', 'd');
+	static List<Character> operations = Arrays.asList('+', '-', '*', '/', '(', ')');
 	static double total = 0;
 	static double exponent = 0;
 	static int sign = 1;
-	static Stack<Character> stack = new Stack<Character>();
-	static Stack<Character> operators = new Stack<Character>();
-	static Stack<Double> operands = new Stack<Double>();
+	static Stack<Character> stack = new Stack<>();
+	static Stack<Character> operators = new Stack<>();
+	static Stack<Double> operands = new Stack<>();
 	
 	/**
 	 * Prompts user to input floating point literal
-	 * @return user inputed string
+	 * @return user inputted string
 	 */
 	public static String prompt() {
-		System.out.printf("Enter a floating point literal or press \'q\' to quit\n(accepted format 111.32e4f)\n");
+		System.out.print("Enter a floating point literal or press 'q' to quit\n(accepted format 111.32e4f)\n");
 		Scanner kbInput = new Scanner(System.in);
 		return kbInput.next().toLowerCase();
 	}
@@ -132,10 +133,7 @@ public class Project2 {
 	 * @return true if string has ended, else false
 	 */
 	private static boolean q5(char[] usrInput, int index, int max) {
-		if (index == max)
-			return true;
-		else
-			return false;
+		return index == max;
 	}
 	
 	/**
@@ -291,28 +289,18 @@ public class Project2 {
 	 */
 	private static double getNum() {
 		char i = stack.pop();
-		switch (i) {
-		case '1':
-			return 1.0;
-		case '2':
-			return 2.0;
-		case '3':
-			return 3.0;
-		case '4':
-			return 4.0;
-		case '5':
-			return 5.0;
-		case '6':
-			return 6.0;
-		case '7':
-			return 7.0;
-		case '8':
-			return 8.0;
-		case '9':
-			return 9.0;
-		default:
-			return 0;
-		}
+		return switch (i) {
+			case '1' -> 1.0;
+			case '2' -> 2.0;
+			case '3' -> 3.0;
+			case '4' -> 4.0;
+			case '5' -> 5.0;
+			case '6' -> 6.0;
+			case '7' -> 7.0;
+			case '8' -> 8.0;
+			case '9' -> 9.0;
+			default -> 0;
+		};
 	}
 	
 	public static void main(String[] args) {
