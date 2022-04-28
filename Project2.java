@@ -22,7 +22,7 @@ public class Project2 {
 	public static String prompt() {
 		System.out.print("Enter a floating point literal or press 'q' to quit\n(accepted format 111.32e4f)\n");
 		Scanner kbInput = new Scanner(System.in);
-		return kbInput.next().toLowerCase();
+		return kbInput.nextLine().toLowerCase();
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class Project2 {
 		} else if (endings.contains(c)) {
 			return q5(usrInput, index+1, max);
 		} else
-			return false;
+			return q12(usrInput, index, max);
 	}
 	
 	/**
@@ -133,7 +133,10 @@ public class Project2 {
 	 * @return true if string has ended, else false
 	 */
 	private static boolean q5(char[] usrInput, int index, int max) {
-		return index == max;
+		if (index == max)
+			return true;
+		else
+			return q12(usrInput, index, max);
 	}
 	
 	/**
@@ -172,8 +175,10 @@ public class Project2 {
 		} else if (endings.contains(c)) {
 			getExponent();
 			return q5(usrInput, index+1, max);
-		} else
-			return false;
+		} else {
+			getExponent();
+			return q12(usrInput, index, max);
+		}
 	}
 	
 	/**
@@ -216,8 +221,10 @@ public class Project2 {
 		} else if (endings.contains(c)) {
 			getDecimal();
 			return q5(usrInput, index+1, max);
-		} else
-			return false;
+		} else {
+			getDecimal();
+			return q12(usrInput, index, max);
+		}
 	}
 	
 	/**
@@ -256,6 +263,7 @@ public class Project2 {
 	}
 
 	private static boolean q12(char[] usrInput, int index, int max) {
+		System.out.println("q12");
 		char c = usrInput[index];
 		if (c == ' ')
 			return q12(usrInput, index+1, max);
@@ -270,8 +278,9 @@ public class Project2 {
 		if (operators.isEmpty()){
 			operators.push(c);
 			return true; // goes to q14 where it checks next char
-		} else if (c == ')') return true;
-			// goes to q15 , keeps popping until empty stack or reaches '(', if empty returns false
+		} else if (c == ')') {
+			return q15(usrInput, index, max);
+		}
 		else if (precedence(c) <= precedence(operators.peek())){
 			if (operands.size() < 2)
 				return false;
@@ -297,7 +306,19 @@ public class Project2 {
 	}
 
 	private static boolean q15(char[] usrInput, int index, int max) {
-		return false;
+		if (operators.isEmpty())
+			return false;
+		else if (operators.peek() == '('){
+			operators.pop();
+			return q12(usrInput, index, max);
+		} else {
+			if (operands.size() < 2)
+				return false;
+			double num1 = operands.pop();
+			double num2 = operands.pop();
+			operands.push(operation(num1, num2));
+			return q15(usrInput, index+1, max);
+		}
 	}
 
 	/**
