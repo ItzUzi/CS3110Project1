@@ -30,6 +30,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q0(char[] usrInput, int index, int max) {
+		System.out.println("q0");
 		if(index == max)
 			return false;	
 		char c = usrInput[index];
@@ -48,6 +49,7 @@ public class Project2 {
 	 * @return true if input is accepted, false else
 	 */
 	private static boolean q1(char[] usrInput, int index, int max) {
+		System.out.println("q1");
 		if (index == max)
 			return false;
 		char c = usrInput[index];
@@ -75,6 +77,7 @@ public class Project2 {
 	 * @return true if input accepted, else false
 	 */
 	private static boolean q2(char[] usrInput, int index, int max) {
+		System.out.println("q2");
 		if (index == max)
 			return false;
 		char c = usrInput[index];
@@ -92,8 +95,11 @@ public class Project2 {
 	 * @return true if String has ended, or if input is accepted, else false
 	 */
 	private static boolean q3(char[] usrInput, int index, int max) {
-		if (index == max)
-			return true;
+		System.out.println("q3");
+		if (index == max) {
+			pushTotal();
+			return q16();
+		}
 		
 		char c = usrInput[index];
 		
@@ -113,6 +119,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q4(char[] usrInput, int index, int max) {
+		System.out.println("q4");
 		if (index == max)
 			return false;	
 		char c = usrInput[index];
@@ -133,8 +140,11 @@ public class Project2 {
 	 * @return true if string has ended, else false
 	 */
 	private static boolean q5(char[] usrInput, int index, int max) {
-		if (index == max)
-			return true;
+		System.out.println("q5");
+		if (index == max){
+			pushTotal();
+			return q16();
+		}
 		else
 			return q12(usrInput, index, max);
 	}
@@ -144,6 +154,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q6(char[] usrInput, int index, int max) {
+		System.out.println("q6");
 		if (index == max)
 			return false;
 		char c = usrInput[index];
@@ -162,6 +173,7 @@ public class Project2 {
 	 * else false
 	 */
 	private static boolean q7(char[] usrInput, int index, int max) {
+		System.out.println("q7");
 		if (index == max) {
 			getExponent();
 			return true;
@@ -186,6 +198,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q8(char[] usrInput, int index, int max) {
+		System.out.println("q8");
 		if (index == max) {
 			return false;
 		}
@@ -205,6 +218,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q9(char[] usrInput, int index, int max) {
+		System.out.println("q9");
 		if (index == max) {
 			getDecimal();
 			return true;
@@ -232,6 +246,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q10(char[] usrInput, int index, int max) {
+		System.out.println("q10");
 		if (index == max) {
 			return false;
 		}	
@@ -250,6 +265,7 @@ public class Project2 {
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q11(char[] usrInput, int index, int max) {
+		System.out.println("q11");
 		if (index == max)
 			return false;
 		char c = usrInput[index];
@@ -264,6 +280,10 @@ public class Project2 {
 
 	private static boolean q12(char[] usrInput, int index, int max) {
 		System.out.println("q12");
+		if (total != 0)
+			pushTotal();
+		if (index == max)
+			return false;
 		char c = usrInput[index];
 		if (c == ' ')
 			return q12(usrInput, index+1, max);
@@ -274,10 +294,12 @@ public class Project2 {
 	}
 
 	private static boolean q13(char[] usrInput, int index, int max) {
+		System.out.println("q13");
 		char c = usrInput[index];
+		System.out.print(" c is: " + c + '\n');
 		if (operators.isEmpty()){
 			operators.push(c);
-			return true; // goes to q14 where it checks next char
+			return q14(usrInput, index+1, max); // goes to q14 where it checks next char
 		} else if (c == ')') {
 			return q15(usrInput, index, max);
 		}
@@ -287,6 +309,7 @@ public class Project2 {
 			double num1 = operands.pop();
 			double num2 = operands.pop();
 			operands.push(operation(num1, num2)); // method that calculates operation
+			operators.push(c);
 			return q14(usrInput, index+1, max); // goes to q14 where it checks next char
 		} else {
 			operators.push(c);
@@ -295,20 +318,30 @@ public class Project2 {
 	}
 
 	private static boolean q14(char[] usrInput, int index, int max) {
-		if (index != max)
-			return true; // goes to q16, checks if '(' or digit, if digit goes to float dfa
+		System.out.println("q14");
+		if (index != max) {
+			char c = usrInput[index];
+			if (digits.contains(c) || c == '.')
+				return q0(usrInput, index, max);
+			else if (c == '('){
+				operators.push(c);
+				return q0(usrInput, index+1, max);
+			} else
+				return false;
+		}
 		else
 			if (operators.isEmpty() && operands.size() == 1) {
 				total = operands.pop();
 				return true;
 			} else
-				return true; // goes to q17, tries to empty stacks, if one fails to meet requirement, returns false
+				return true; // goes to q16, tries to empty stacks, if one fails to meet requirement, returns false
 	}
 
 	private static boolean q15(char[] usrInput, int index, int max) {
+		System.out.println("q15");
 		if (operators.isEmpty())
 			return false;
-		else if (operators.peek() == '('){
+		else if (operators.peek() == '(') {
 			operators.pop();
 			return q12(usrInput, index, max);
 		} else {
@@ -316,9 +349,27 @@ public class Project2 {
 				return false;
 			double num1 = operands.pop();
 			double num2 = operands.pop();
+
 			operands.push(operation(num1, num2));
-			return q15(usrInput, index+1, max);
+			return q15(usrInput, index, max);
 		}
+	}
+
+	/**
+	 * reached max already
+	 */
+	private static boolean q16() {
+		System.out.println("q16");
+		System.out.printf("\nOperators: %d\noperands: %d\n", operators.size(), operands.size());
+		if (operators.isEmpty() && operands.size() == 1)
+			return true;
+		if (operands.size() < 2 || operators.isEmpty())
+			return false;
+		double num1 = operands.pop();
+		double num2 = operands.pop();
+		operands.push(operation(num1, num2));
+		return q16();
+
 	}
 
 	/**
@@ -388,7 +439,8 @@ public class Project2 {
 	 * @return value of operation being done, dependent on operator stack
 	 */
 	private static double operation(double num1, double num2){
-		return switch (operators.pop()) {
+		char c = operators.pop();
+		return switch (c) {
 			case '*' -> num2 * num1;
 			case '/' -> num2 / num1;
 			case '+' -> num2 + num1;
@@ -396,7 +448,15 @@ public class Project2 {
 			default -> -1;
 		};
 	}
-	
+
+	private static void pushTotal() {
+		total *= Math.pow(10, exponent*sign);
+		operands.push(total);
+		total = 0;
+		exponent = 0;
+		sign = 1;
+	}
+
 	public static void main(String[] args) {
 		String input = prompt();
 		
@@ -404,16 +464,13 @@ public class Project2 {
 			char[] usrInput = input.toCharArray();
 			int index = 0;
 			if (q0(usrInput, index, usrInput.length)) {
-				total *= Math.pow(10, exponent*sign);
-				System.out.println(total);
-				operands.push(total);
+				System.out.println(operands.pop());
 			}
 			else
 				System.out.println("Invalid format");
 			stack.clear();
-			total = 0;
-			exponent = 0;
-			sign = 1;
+			operands.clear();
+			operators.clear();
 			input = prompt();
 		}
 		System.out.println("Exited number identifier.");
