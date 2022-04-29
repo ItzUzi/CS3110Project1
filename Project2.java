@@ -40,6 +40,10 @@ public class Project2 {
 			return q1(usrInput, index+1, max);
 		} else if (c == '.')
 			return q2(usrInput, index+1, max);
+		else if (c == '('){
+			operators.push(c);
+			return q0(usrInput, index+1, max);
+		}
 		else
 			return false;
 	}
@@ -176,7 +180,8 @@ public class Project2 {
 		System.out.println("q7");
 		if (index == max) {
 			getExponent();
-			return true;
+			pushTotal();
+			return q16();
 		}
 		char c = usrInput[index];
 		if (c == '_')
@@ -221,7 +226,8 @@ public class Project2 {
 		System.out.println("q9");
 		if (index == max) {
 			getDecimal();
-			return true;
+			pushTotal();
+			return q16();
 		}
 		char c = usrInput[index];
 		if (c == '_')
@@ -294,16 +300,18 @@ public class Project2 {
 	}
 
 	private static boolean q13(char[] usrInput, int index, int max) {
+		for (char c: operators)
+			System.out.println(c);
 		System.out.println("q13");
 		char c = usrInput[index];
-		System.out.print(" c is: " + c + '\n');
+		System.out.print("c is: " + c + '\n');
 		if (operators.isEmpty()){
 			operators.push(c);
 			return q14(usrInput, index+1, max); // goes to q14 where it checks next char
 		} else if (c == ')') {
 			return q15(usrInput, index, max);
 		}
-		else if (precedence(c) <= precedence(operators.peek())){
+		else if (precedence(c) <= precedence(operators.peek()) && operators.peek() != '('){
 			if (operands.size() < 2)
 				return false;
 			double num1 = operands.pop();
@@ -319,14 +327,23 @@ public class Project2 {
 
 	private static boolean q14(char[] usrInput, int index, int max) {
 		System.out.println("q14");
+		for (char c: operators)
+			System.out.println("operators are: " + c);
+		System.out.println("Max is: " + max + "\nindex is: " + index);
 		if (index != max) {
 			char c = usrInput[index];
 			if (digits.contains(c) || c == '.')
 				return q0(usrInput, index, max);
 			else if (c == '('){
 				operators.push(c);
-				return q0(usrInput, index+1, max);
-			} else
+				return q14(usrInput, index+1, max);
+			} else if (c == ' ')
+				return q14(usrInput, index+1, max);
+			else if (c == ')')
+				return q15(usrInput, index, max);
+			else if (operations.contains(c))
+				return q13(usrInput, index, max);
+			else
 				return false;
 		}
 		else
@@ -334,16 +351,17 @@ public class Project2 {
 				total = operands.pop();
 				return true;
 			} else
-				return true; // goes to q16, tries to empty stacks, if one fails to meet requirement, returns false
+				return q16(); // goes to q16, tries to empty stacks, if one fails to meet requirement, returns false
 	}
 
 	private static boolean q15(char[] usrInput, int index, int max) {
 		System.out.println("q15");
+		System.out.println("Operator is: " + operators.peek());
 		if (operators.isEmpty())
 			return false;
 		else if (operators.peek() == '(') {
 			operators.pop();
-			return q12(usrInput, index, max);
+			return q14(usrInput, index+1, max);
 		} else {
 			if (operands.size() < 2)
 				return false;
@@ -439,8 +457,7 @@ public class Project2 {
 	 * @return value of operation being done, dependent on operator stack
 	 */
 	private static double operation(double num1, double num2){
-		char c = operators.pop();
-		return switch (c) {
+		return switch (operators.pop()) {
 			case '*' -> num2 * num1;
 			case '/' -> num2 / num1;
 			case '+' -> num2 + num1;
