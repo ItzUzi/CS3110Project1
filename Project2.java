@@ -478,6 +478,9 @@ public class Project2 {
 			stack.clear();
 			operands.clear();
 			operators.clear();
+			exponent = 0;
+			total = 0;
+			sign = 1;
 			input = prompt();
 		}
 		System.out.println("Exited number identifier.");
