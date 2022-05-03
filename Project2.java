@@ -26,7 +26,7 @@ public class Project2 {
 	}
 	
 	/**
-	 * start state, goes to state 1 and state 2
+	 * start state, goes to q1, q2, q17
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q0(char[] usrInput, int index, int max) {
@@ -92,7 +92,7 @@ public class Project2 {
 	
 	/**
 	 * Accept State
-	 * goes to q4, q5, q9
+	 * goes to q4, q5, q9, q12, q16
 	 * @return true if String has ended, or if input is accepted, else false
 	 */
 	private static boolean q3(char[] usrInput, int index, int max) {
@@ -135,7 +135,7 @@ public class Project2 {
 	}
 	
 	/**
-	 * Accept State
+	 * Accept State, goes to q12, q16
 	 * @return true if string has ended, else false
 	 */
 	private static boolean q5(char[] usrInput, int index, int max) {
@@ -165,7 +165,7 @@ public class Project2 {
 
 	/**
 	 * Accept State
-	 * goes to q5, q7, q11
+	 * goes to q5, q7, q11, q12, q16
 	 * @return true if reached end of string or if input is accepted,
 	 * else false
 	 */
@@ -210,7 +210,7 @@ public class Project2 {
 	
 	/**
 	 * Accept state
-	 * goes to q4, q5, q9, q10
+	 * goes to q4, q5, q9, q10, q12, q16
 	 * @return true if input ends on accept state, else false
 	 */
 	private static boolean q9(char[] usrInput, int index, int max) {
@@ -272,6 +272,14 @@ public class Project2 {
 			return false;
 	}
 
+	/**
+	 * goes to states q12, q13
+	 * checks if char is ' ' or an operator
+	 * @param usrInput input being checked
+	 * @param index index of char being checked
+	 * @param max length of input
+	 * @return false if char not accepted or max reached, return next state
+	 */
 	private static boolean q12(char[] usrInput, int index, int max) {
 		if (total != 0)
 			pushTotal();
@@ -286,6 +294,14 @@ public class Project2 {
 			return false;
 	}
 
+	/**
+	 * goes to q14, q15
+	 * Checks char to see if operator, else return false
+	 * @param usrInput input being checked
+	 * @param index index of char being checked
+	 * @param max length of usrInput
+	 * @return false if not enough operands to do operations, else return next states boolean value
+	 */
 	private static boolean q13(char[] usrInput, int index, int max) {
 		char c = usrInput[index];
 		if (operators.isEmpty()){
@@ -308,6 +324,15 @@ public class Project2 {
 		}
 	}
 
+	/**
+	 * goes to q0, q13, q14, q15, q16
+	 * Checks if next char is any acceptable char
+	 * @param usrInput input being checks
+	 * @param index index of char being checked
+	 * @param max length of usrInput
+	 * @return false if char is not accepted, else returns true if operands.size==1 & operators.isEmpty
+	 * or next state's return value
+	 */
 	private static boolean q14(char[] usrInput, int index, int max) {
 		if (index != max) {
 			char c = usrInput[index];
@@ -332,6 +357,14 @@ public class Project2 {
 				return q16(); // goes to q16, tries to empty stacks, if one fails to meet requirement, returns false
 	}
 
+	/**
+	 * goes to q14, q15
+	 * Empties stack until it reaches a '('
+	 * @param usrInput input being checked
+	 * @param index index being passed onto next state
+	 * @param max	input length
+	 * @return	false if operators.stack is empty, operands.size < 2, else return true if next state resturns true
+	 */
 	private static boolean q15(char[] usrInput, int index, int max) {
 		if (operators.isEmpty())
 			return false;
@@ -350,7 +383,8 @@ public class Project2 {
 	}
 
 	/**
-	 * reached max already
+	 * goes to q16
+	 * reached max already and empties operands and operators stack
 	 */
 	private static boolean q16() {
 		if (operators.isEmpty() && operands.size() == 1)
@@ -364,6 +398,14 @@ public class Project2 {
 
 	}
 
+	/**
+	 * goes to q0, q17
+	 * comes from q0(), checks if next char is ' ', digit, '(', '.'
+	 * @param usrInput usrInput being checked
+	 * @param index	Index currently checking
+	 * @param max	Length of string
+	 * @return	False if max is reached or input is not accepted, else returns true if next state is true
+	 */
 	private static boolean q17(char[] usrInput, int index, int max) {
 		if (index == max)
 			return false;
@@ -456,6 +498,9 @@ public class Project2 {
 		};
 	}
 
+	/**
+	 * Pushes current number value onto operands stack
+	 */
 	private static void pushTotal() {
 		total *= Math.pow(10, exponent*sign);
 		operands.push(total);
