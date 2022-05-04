@@ -20,7 +20,7 @@ public class Project2 {
 	 * @return user inputted string
 	 */
 	public static String prompt() {
-		System.out.print("Enter a floating point literal or press 'q' to quit\n(accepted format 111.32e4f)\n");
+		System.out.println("Enter a floating point literal or equation or press 'q' to quit");
 		Scanner kbInput = new Scanner(System.in);
 		return kbInput.nextLine().toLowerCase();
 	}
